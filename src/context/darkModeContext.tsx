@@ -4,6 +4,7 @@ export const initialValues = {
     darkMode: false,
     light: () => {},
     dark: () => {},
+    toggle: () => {},
 }
 
 
@@ -15,7 +16,7 @@ type State =  {
 }
 
 type Action = {
-    type: "lightMode" | "darkMode";
+    type: "lightMode" | "darkMode" | "toggle";
 }
 
  
@@ -25,6 +26,10 @@ function reducer(state: State, action: Action): State {
             return {darkMode : false}
         case "darkMode": 
             return {darkMode : true}
+        case "toggle":
+            return {
+                darkMode: !state.darkMode
+            }
         default:
             return state
     }
@@ -38,7 +43,7 @@ export const AppProvider = ({ children }: any) => {
         darkMode: state.darkMode,
         light: () => dispatch({type: 'lightMode'}),
         dark: () => dispatch({type: 'darkMode'}),
-
+        toggle: () => dispatch({type: 'toggle'})
     }}>
         {children}
     </AppContext.Provider>

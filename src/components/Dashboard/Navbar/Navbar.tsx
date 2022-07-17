@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './Navbar.scss';
 import { SearchOutlined, LanguageOutlined, DarkModeOutlined, FullscreenExitOutlined, NotificationsNoneOutlined, ChatBubbleOutlineOutlined, ListOutlined } from '@mui/icons-material';
 import YomaImg from '../../../assets/yoma.jpg';
+import { AppContext } from '../../../context/darkModeContext';
 
 const Navbar = () => {
+  
+  const context = useContext(AppContext)
+  const {toggle} = context;
+
   const [icons] = useState([
     {
       id: 1,
@@ -12,7 +17,8 @@ const Navbar = () => {
     }, 
     {
       id: 2,
-      icon: <DarkModeOutlined />
+      icon: <DarkModeOutlined />, 
+      onClick: toggle
     },
     {
       id: 3,
@@ -35,6 +41,9 @@ const Navbar = () => {
       img: YomaImg
     }
   ])
+
+  
+
   return (
     <div className="navbar">
       <div className="wrapper">
@@ -54,8 +63,11 @@ const Navbar = () => {
                   />
                 ): 
                   (
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                      <span className='icon'>{icon.icon}</span>
+                    <div 
+                      key={icon.id} 
+                      style={{display: 'flex', alignItems: 'center'}} 
+                      >
+                      <span className='icon' onClick={icon.onClick}>{icon.icon}</span>
                       {icon.name}
                     </div>
                   )
