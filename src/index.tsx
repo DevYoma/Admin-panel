@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-// import { DarkModeContextProvider } from './context/darkModeContext';
 import { AppProvider } from './context/darkModeContext';
+import {  AuthProvider } from './context/AuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,7 +14,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AppProvider >
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </AppProvider>
     </BrowserRouter>
   </React.StrictMode>

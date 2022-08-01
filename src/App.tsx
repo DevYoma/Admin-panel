@@ -1,14 +1,7 @@
 import React, { useContext, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Routes, Route} from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import Feed from './components/Feed';
-import Rightbar from './components/Rightbar';
-import { Box } from '@mui/system';
-import { createTheme, PaletteMode, Stack, ThemeProvider } from '@mui/material';
-import Navbar from './components/Navbar';
-import Add from './components/Add'
+import { Routes, Route, Navigate} from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Login from './Pages/Login/Login';
 import List from './Pages/List/List';
@@ -18,49 +11,70 @@ import New from './Pages/New/New';
 import { userInputs, productInputs } from './utils/FormSource';
 import './styles/dark.scss';
 import { AppContext } from './context/darkModeContext';
-// import { DarkModeContext } from './context/darkModeContext';
-
+import { AuthContext } from './context/AuthContext';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   const context = useContext(AppContext);
 
   const {darkMode, light, dark} = context;
-  console.log(darkMode);
+  // console.log(darkMode);
 
+  const authContext = useContext(AuthContext);
+  const {currentUser } = authContext;
 
+  // console.log(currentUser);
+
+  // const RequireAuth = ({ children}: any) => {
+  //   return currentUser ? children : <Navigate to={'/login'}/>
+  // }
   
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <Routes>
         <Route path='/'>
-          <Route index element={<Home />} />
           <Route path='/login' element={<Login />}/>
+          <Route index element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>} 
+          />
             <Route path='users'>
-              <Route index element={<List />} />
-              <Route path=':userId' element={<Single />}/>
-              <Route path='new' element={<New inputs={userInputs} title="Add New User" />}/>
+              <Route index element={
+              <RequireAuth>
+                <List />
+              </RequireAuth>} />
+              <Route path=':userId' element={
+                <RequireAuth>
+                  <Single />
+                </RequireAuth>} 
+              />
+              
+              <Route path='new' element={ 
+                <RequireAuth>
+                    <New inputs={userInputs} title="Add New User" />
+                </RequireAuth>} />
             </Route>
 
             <Route path='products'>
-              <Route index element={<List />} />
-              <Route path=':productId' element={<Single />}/>
-              <Route path='new' element={<New inputs={productInputs} title="Add New Product" />}/>
+              <Route index element={
+                  <RequireAuth>
+                    <List />
+                </RequireAuth>}
+               />
+              <Route path=':productId' element={
+                  <RequireAuth>
+                     <Single />
+                 </RequireAuth>}
+              />
+              {/* <New inputs={productInputs} title="Add New Product" /> */}
+              <Route path='new' element={
+                      <RequireAuth>
+                        <New inputs={productInputs} title="Add New Product" />
+                  </RequireAuth>
+              }/>
             </Route>
         </Route>
-        
-        {/* <Route path='/devyoma' element={
-            <ThemeProvider theme={darkTheme}>
-            <Box className="app" bgcolor={"background.default"} color={"text.primary"}>
-              <Navbar />
-              <Stack direction="row" spacing={2} justifyContent="space-between">
-                <Sidebar setMode={setMode} mode={mode}/>
-                <Feed />
-                <Rightbar />
-              </Stack>
-                <Add />
-            </Box>
-          </ThemeProvider>
-        }/> */}
       </Routes>
     </div>
   );

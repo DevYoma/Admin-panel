@@ -2,8 +2,8 @@ import { AccountCircleOutlined, BarChartSharp, CreditCardOutlined, Dashboard, De
 import './SidebarDash.scss';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-// import { DarkModeContext } from '../../../context/darkModeContext';
 import { AppContext } from '../../../context/darkModeContext';
+import { AuthContext } from '../../../context/AuthContext';
 
 const SidebarDash = () => {
 
@@ -12,9 +12,12 @@ const SidebarDash = () => {
   const context = useContext(AppContext);
 
   const {darkMode, light, dark} = context;
-  console.log(darkMode);
+  // console.log(darkMode);
 
   // we are dispatching actions through the reducer here
+
+  const authContext = useContext(AuthContext);
+  const {logout} = authContext;
  
   return (
     <div className="sidebar">
@@ -94,7 +97,7 @@ const SidebarDash = () => {
               <AccountCircleOutlined className="icon"/>
               <span>Profile</span>
             </li>
-            <li>
+            <li onClick={() => logout()}>
               <ExitToAppOutlined className="icon"/>
               <span>Logout</span>
             </li>
